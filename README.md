@@ -1,7 +1,6 @@
-## Deployment Journal
----
-The repository conatins YAML files to deploy a Wordpress application in a Kubernetes cluster.
+### Deployment Journal
 
+The repository conatins YAML files to deploy a Wordpress application in a Kubernetes cluster.
 
 1. Create the Secret and ConfigMap
     ```
