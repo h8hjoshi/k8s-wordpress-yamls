@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: h8h-wordpress
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: h8h-wordpress
+  minReadySeconds: 20
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: h8h-wordpress
+        version: "1"
+    spec:
+      containers:
+      - name: h8h-wordpress
+        image: wordpress:php7.4-apache
+        env:
+          - name: WORDPRESS_DB_HOST
+            value: h8h-mysql
+          - name: WORDPRESS_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql_username
+          - name: WORDPRESS_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql_password
+          - name: WORDPRESS_DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: mysql-configs
+                key: wp_database
+        ports:
+        - containerPort:  80

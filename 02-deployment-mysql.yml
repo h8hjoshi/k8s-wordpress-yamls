@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: h8h-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: h8h-mysql
+  template:
+    metadata:
+      labels:
+        app: h8h-mysql
+    spec:
+      containers:
+        - name: h8h-mysql
+          image: mysql:8.0.16
+          env:
+          - name: MYSQL_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: mysql-configs
+                key: wp_database
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql_root_password
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql_username
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql_password
+          ports:
+          - containerPort: 3306
+          
