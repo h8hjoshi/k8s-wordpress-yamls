@@ -12,6 +12,10 @@ spec:
       labels:
         app: h8h-mysql
     spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mysql-volume-claim
       containers:
         - name: h8h-mysql
           image: mysql:8.0.16
@@ -38,4 +42,7 @@ spec:
                 key: mysql_password
           ports:
           - containerPort: 3306
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
           
