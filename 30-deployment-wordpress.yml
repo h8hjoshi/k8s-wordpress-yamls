@@ -3,16 +3,10 @@ kind: Deployment
 metadata:
   name: h8h-wordpress
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: h8h-wordpress
-  minReadySeconds: 20
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -21,8 +15,8 @@ spec:
     spec:
       volumes:
         - name: wordpress-data
-          persistentVolumeClaim: 
-            name: wordpress-pvc
+          persistentVolumeClaim:
+            claimName: wordpress-pvc
       containers:
       - name: h8h-wordpress
         image: wordpress:php7.4-apache

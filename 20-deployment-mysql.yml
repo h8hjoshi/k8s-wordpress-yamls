@@ -12,13 +12,9 @@ spec:
       labels:
         app: h8h-mysql
     spec:
-      volumes:
-        - name: mysql-data
-          persistentVolumeClaim:
-            claimName: mysql-pvc
       containers:
         - name: h8h-mysql
-          image: mysql:8.0.16
+          image: mysql:8.0.19
           env:
           - name: MYSQL_DATABASE
             valueFrom:
@@ -43,6 +39,13 @@ spec:
           ports:
           - containerPort: 3306
           volumeMounts:
-            - name: mysql-data
-              mountPath: /var/lib/mysql
+            - mountPath: /var/lib/mysql
+              name: mysql-data
+              #using subpath in the volume, mysql initialisation failed due to the existing lost+dir directory
+              #https://github.com/docker-library/mysql/issues/186
+              subPath: db 
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: mysql-pvc
           
